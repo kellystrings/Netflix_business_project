@@ -14,7 +14,7 @@ This project uses SQL to analyze data from Netflix's movies and TV shows compreh
 ##Dataset
 The data for this project is sourced from the Kaggle dataset:
 
-* Dataset Link: ![Movies Dataset](https://www.kaggle.com/datasets/shivamb/netflix-shows?resource=download)
+* Dataset Link: (https://www.kaggle.com/datasets/shivamb/netflix-shows?resource=download)
 
 ## Schema
 ```sql
@@ -36,7 +36,7 @@ description VARCHAR(300)
 ```
 
 ##Business Problems and Solutions
-###1. Count the Number of Movies vs TV Shows
+### 1. Count the Number of Movies vs TV Shows
    ```sql
    SELECT 
 	type,
@@ -44,4 +44,25 @@ description VARCHAR(300)
 FROM netflix
 GROUP BY 1;
    ```
-3. 
+Objective: Determine the distribution of content types on Netflix.
+
+### 2. Find the Most Common Rating for Movies and TV Shows
+```sql
+SELECT
+	type,
+	rating
+FROM
+
+(
+SELECT
+	type,
+	rating,
+	COUNT(*),
+	RANK() OVER(PARTITION BY type ORDER BY COUNT(*)DESC) as ranking
+FROM netflix
+GROUP BY 1, 2
+--ORDER BY 1, 3 DESC
+) as t1
+WHERE ranking =1
+```
+Objective: Identify the most frequently occurring rating for each type of content.
